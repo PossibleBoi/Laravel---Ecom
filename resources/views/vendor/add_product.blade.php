@@ -146,7 +146,8 @@
                                         <span class="text-danger">{{"Brand is required."}}</span>
                                     @endif
                                     <button type="button" class="btn btn-primary">Submit</button>
-                                </form>
+                            </ul>
+                                  </form>
                                 
                     </div>
                     </div><!-- /.row -->

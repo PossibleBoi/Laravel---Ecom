@@ -44,7 +44,7 @@ class ProductController extends Controller
             foreach ($req['file'] as $image) {
                 $img = time() . rand(1, 100000) . '.' . $image->extension();
                 $image->move(public_path('storage'), $img);
-                
+
                 Images::create([
                     'imageable_id' => $product->id,
                     'imageable_type' => 'product',
@@ -52,7 +52,6 @@ class ProductController extends Controller
                 ]);
             }
         }
-
     }
 
 
@@ -77,13 +76,11 @@ class ProductController extends Controller
 
     public function update(Request $req)
     {
-        
+
         $id = request('product');
         $product = Product::find($id);
         $image_org = Images::where('imageable_id', $id)->first();
         $path = $image_org->image;
-        
-        dd($image_org);
 
         $data = $req->validate([
             'name' => ['required'],
@@ -136,5 +133,20 @@ class ProductController extends Controller
         }
 
         return redirect()->route('vendor.products');
+    }
+
+    public function edit_img_del(Request $req)
+    {
+        foreach(request('selected_images') as $img_id){
+        $image_org = Images::where('id', $img_id)->first();
+        $path = $image_org->image;
+        if (File::exists(public_path($path))) {
+            File::delete(public_path($path));
+            $image_org->delete();
+        } else {
+            $image_org->delete();
+        }
+    }
+        return redirect()->back();
     }
 }

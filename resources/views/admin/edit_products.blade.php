@@ -52,40 +52,41 @@
 
                         <!-- Sidebar Menu -->
                         <nav class="mt-2">
-                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                              <!-- Add icons to the links using the .nav-icon class
+                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                                data-accordion="false">
+                                <!-- Add icons to the links using the .nav-icon class
                                    with font-awesome or any other icon font library -->
-                              <li class="nav-item menu-open">
-                                  <li class="nav-item">
-                                    <a href="/admin/users" class="nav-link">
-                                      <i class="far fa-circle nav-icon"></i>
-                                      <p>Registered Users </p>
-                                    </a>
-                                  </li>
-                                  <li class="nav-item">
-                                    <a href="/admin/vendors" class="nav-link">
-                                      <i class="far fa-circle nav-icon"></i>
-                                      <p>Registered Vendors</p>
-                                    </a>
-                                  </li>
-                                  <li class="nav-item">
-                                    <a href="{{route('admin.products')}}" class="nav-link">
-                                      <i class="far fa-circle nav-icon"></i>
-                                      <p>Registered Products</p>
-                                    </a>
-                                  </li>
-                              
+                                <li class="nav-item menu-open">
                                 <li class="nav-item">
-                                  <a href="/profile" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>
-                                      Profile Settings
-                                    </p>
-                                  </a>
+                                    <a href="/admin/users" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Registered Users </p>
+                                    </a>
                                 </li>
-                              </li>
+                                <li class="nav-item">
+                                    <a href="/admin/vendors" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Registered Vendors</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.products') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Registered Products</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/profile" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Profile Settings
+                                        </p>
+                                    </a>
+                                </li>
+                                </li>
                             </ul>
-                          </nav>
+                        </nav>
                         <!-- /.sidebar-menu -->
                     </div>
                     <!-- /.sidebar -->
@@ -96,100 +97,107 @@
                     <!-- Content Header (Page header) -->
                     <div class="content-header">
                         <div class="container-fluid">
+
                             <div class="row mb-2">
-                                <form action="{{ route('a_product.update', ['product' => $products->first()->id]) }}"
-                                    method="POST"  enctype="multipart/form-data">
+                                <form action="{{route('edit.img_delete')}}" method="POST">
                                     @csrf
-                                    @method('PUT')
-                                    <div>
-                                        <label> &nbsp;Name</label>
-                                        <input type="text" class="form-control" name="name"
-                                            value="{{ $products->first()->name }}" autocomplete="off">
-
-                                        <label> &nbsp;Description</label>
-                                        <input type="text" class="form-control" name="description"
-                                            value="{{ $products->first()->description }}" autocomplete="off">
-
-                                        <label> &nbsp;Brand</label>
-                                        <input type="text" class="form-control" name="brand"
-                                            value="{{ $products->first()->brand }}" autocomplete="off">
-
-                                        <label> &nbsp;Stock</label>
-                                        <input type="text" class="form-control" name="stock"
-                                            value="{{ $products->first()->stock }}" autocomplete="off">
-
-                                        <label> &nbsp;Price</label>
-                                        <input type="text" class="form-control" name="price"
-                                            value="{{ $products->first()->price }}" autocomplete="off">
-
-                                        <label> &nbsp;Image</label>
-                                        @foreach($images as $image)
-
+                                    @method('DELETE')   
+                                    @foreach ($images as $image)
+                                    <div class="col-md-4">
                                         <div class="input-group mb-3">
-                                            <img src="{{ asset($image->image) }}" alt="No"
-                                               name="{{$image->id}}" width="125px" height="125px">
-                                        </div>
-                                        @endforeach
-                                        <div class="input-group mb-3">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="customFile" name="image">
-                                                <label class="custom-file-label">Choose
-                                                    File</label>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input image-checkbox"
+                                                name="selected_images[{{$image->id}}]" id="image{{ $image->id }}" value="{{$image->id}}" >
+                                                <label class="custom-control-label" for="image{{ $image->id }}">
+                                                    <img src="{{ asset($image->image) }}" alt="No" width="125px"
+                                                        height="125px">
+                                                </label>
                                             </div>
                                         </div>
-                                        <h2><button class="btn btn-success"><b>Submit</b></button></h2>
-                                        <h3>
-                                            <a href="{{ route('admin.products') }}"
-                                                class="badge badge-danger">Cancel</a>
-                                        </h3>
-                                </form>
+                                    </div>
+                                @endforeach
+                                <!-- Add a button to trigger image removal -->
+                                <div class="input-group mb-3">
+                                    <div class="custom-file">
+                                            
+                                        <button id="removeImageButton" class="btn btn-danger">Remove Image</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                             
+                            <form action="{{ route('a_product.update', ['product' => $products->first()->id]) }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+                                <div>
+                                    <label> &nbsp;Name</label>
+                                    <input type="text" class="form-control" name="name"
+                                        value="{{ $products->first()->name }}" autocomplete="off">
 
-                            </div><!-- /.row -->
-                        </div><!-- /.container-fluid -->
-                    </div>
-                    <!-- /.content-header -->
+                                    <label> &nbsp;Description</label>
+                                    <input type="text" class="form-control" name="description"
+                                        value="{{ $products->first()->description }}" autocomplete="off">
 
-                    <!-- Main content -->
-                    <div class="content">
-                        <div class="container-fluid">
+                                    <label> &nbsp;Brand</label>
+                                    <input type="text" class="form-control" name="brand"
+                                        value="{{ $products->first()->brand }}" autocomplete="off">
 
-                            <!-- /.row -->
-                        </div><!-- /.container-fluid -->
-                    </div>
-                    <!-- /.content -->
+                                    <label> &nbsp;Stock</label>
+                                    <input type="text" class="form-control" name="stock"
+                                        value="{{ $products->first()->stock }}" autocomplete="off">
+
+                                    <label> &nbsp;Price</label>
+                                    <input type="text" class="form-control" name="price"
+                                        value="{{ $products->first()->price }}" autocomplete="off">
+
+
+
+                                    <div class="input-group mb-3">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="customFile"
+                                                name="image">
+                                            <label class="custom-file-label">Choose File</label>
+                                        </div>
+                                    </div>
+                                    <h2><button class="btn btn-success"><b>Submit</b></button></h2>
+                                    <h3>
+                                        <a href="{{ route('admin.products') }}" class="badge badge-danger">Cancel</a>
+                                    </h3>
+                            </form>
+
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
                 </div>
-                <!-- /.content-wrapper -->
+                <!-- /.content-header -->
 
-                <!-- Control Sidebar -->
+                <!-- Main content -->
+                <div class="content">
+                    <div class="container-fluid">
 
-                <!-- /.control-sidebar -->
-
-                <!-- Main Footer -->
-                <footer class="main-footer">
-                    <!-- To the right -->
-                    <div class="float-right d-none d-sm-inline">
-                        Anything you want
-                    </div>
-                    <!-- Default to the left -->
-                    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All
-                    rights reserved.
-                </footer>
+                        <!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content -->
             </div>
+            <!-- /.content-wrapper -->
+
+            <!-- Control Sidebar -->
+
+            <!-- /.control-sidebar -->
+
+            <!-- Main Footer -->
+            <footer class="main-footer">
+                <!-- To the right -->
+                <div class="float-right d-none d-sm-inline">
+                    Anything you want
+                </div>
+                <!-- Default to the left -->
+                <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All
+                rights reserved.
+            </footer>
         </div>
-        <script type="application/javascript">
-            // Select the file input by its ID.
-            var fileInput = document.getElementById('customFile');
-        
-            // Add an event listener to the file input.
-            fileInput.addEventListener('change', function(e) {
-                // Get the selected file's name.
-                var fileName = e.target.files[0].name;
-        
-                // Update the label's text with the selected file name.
-                var customFileLabel = document.querySelector('.custom-file-label');
-                customFileLabel.textContent = fileName;
-            });
-        </script>
-        
+        </div>
     </x-slot>
+
 </x-layout>

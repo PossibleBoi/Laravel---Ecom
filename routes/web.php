@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/',[HomeController::class,'home'])->name('home');
     Route::get('/all_products',[HomeController::class,'all_products'])->name('all_products');
     Route::get('/cart',[HomeController::class,'cart'])->name('cart');
+    Route::delete('img/delete',[ProductController::class,'edit_img_del'])->name('edit.img_delete');
 });
 
 

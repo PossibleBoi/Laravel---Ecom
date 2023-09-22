@@ -72,7 +72,12 @@ class HomeController extends Controller
 
     public function cart()
     {
-        $products = DB::table('images')->groupBy('imageable_id')->join('product', 'product.id', '=', 'images.imageable_id')->get();
-        return view('cart', compact('products'));
+        $id = 25;
+        $products = Product::where('id', $id)->get();
+
+        $images = Images::where('imageable_id', $id)->get();
+
+
+        return view('rough', compact('products', 'images', 'id'));
     }
 }

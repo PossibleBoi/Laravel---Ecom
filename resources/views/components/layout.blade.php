@@ -53,18 +53,19 @@
             e.stopPropagation();
             dropzone.processQueue();
         });
-        function showMessage(message) {
-        // Create and display a pop-up message
-        var popup = document.createElement("div");
-        popup.innerHTML = message;
-        popup.className = "popup";
-        document.body.appendChild(popup);
 
-        // Remove the pop-up message after 3 seconds
-        setTimeout(function() {
-            popup.parentNode.removeChild(popup);
-        }, 500);
-    }
+        function showMessage(message) {
+            // Create and display a pop-up message
+            var popup = document.createElement("div");
+            popup.innerHTML = message;
+            popup.className = "popup";
+            document.body.appendChild(popup);
+
+            // Remove the pop-up message after 3 seconds
+            setTimeout(function() {
+                popup.parentNode.removeChild(popup);
+            }, 500);
+        }
         this.on("sendingmultiple", function() {
             // Gets triggered when the form is actually being sent.
             // Hide the success button or the complete form.
@@ -79,6 +80,52 @@
         });
     </script>
 
+    {{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const removeImageButton = document.getElementById("removeImageButton");
+            const checkboxes = document.querySelectorAll(".image-checkbox");
+
+            removeImageButton.addEventListener("click", function() {
+                const selectedImageIds = [];
+
+                checkboxes.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                        selectedImageIds.push(checkbox.getAttribute("data-image-id"));
+                    }
+                });
+
+                // Send the selectedImageIds to your server using AJAX or a form submission
+                // Example using AJAX (you may need to adjust this based on your backend)
+                if (selectedImageIds.length > 0) {
+                    fetch("img/delete", {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                                // Add any additional headers you may need
+                            },
+                            body: JSON.stringify({
+                                selectedImageIds
+                            }),
+                        })
+                        .then((response) => {
+                            if (response.ok) {
+                                // Handle a successful response here
+                                console.log("Images removed successfully");
+                                // You can also refresh the page or update the UI as needed
+                            } else {
+                                // Handle errors if needed
+                                console.error("Error removing images");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Request failed:", error);
+                        });
+                } else {
+                    alert("Please select at least one image to remove.");
+                }
+            });
+        });
+    </script> --}}
 </body>
 
 </html>
