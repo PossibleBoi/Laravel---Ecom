@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 
 /*
@@ -27,11 +28,13 @@ use App\Http\Controllers\ProfileController;
 */
 
 
+Route::get('/',[HomeController::class,'home'])->name('home');
+Route::get('/product/{id}',[HomeController::class,'individual_product'])->name('inv_product');
+Route::get('/all_products',[HomeController::class,'all_products'])->name('all_products');
+
 Route::middleware('auth')->group(function(){
-    
-    Route::get('/',[HomeController::class,'home'])->name('home');
-    Route::get('/all_products',[HomeController::class,'all_products'])->name('all_products');
-    Route::get('/cart',[HomeController::class,'cart'])->name('cart');
+    Route::get('/cart',[CartController::class,'cart'])->name('cart');
+    Route::get('cart/add/{id}', [CartController::class, 'add_cart'])->name('cart.add');
     Route::delete('img/delete',[ProductController::class,'edit_img_del'])->name('edit.img_delete');
 });
 

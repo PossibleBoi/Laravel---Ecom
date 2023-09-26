@@ -120,8 +120,6 @@ class AdminController extends Controller
 
         $id = request('product');
         $product = Product::find($id);
-        $image_org = Images::where('imageable_id', $id)->first();
-        $path = $image_org->image;
 
         $data = $req->validate([
             'name' => ['required'],
@@ -133,28 +131,18 @@ class AdminController extends Controller
 
         $product->update($data);
 
-        if (!empty(request('image'))) {
-            if (File::exists($path)) {
-                File::delete($path);
-
-                $img = time() . '.' . request('image')->extension();
-                $req->image->move(public_path('storage'), $img);
-
-                // Update the image path in the database
-                $image_org->update([
-                    'image' => ("storage\\$img"),
-                ]);
-            } else {
-                $img = time() . '.' . request('image')->extension();
-                $req->image->move(public_path('storage'), $img);
-
-
-                // Update the image path in the database
-                $image_org->update([
+        if ($req->hasFile('file')) {
+            foreach ($req['file'] as $image) {
+                $img = time() . rand(1, 100000) . '.' . $image->extension();
+                $image->move(public_path('storage'), $img);
+                Images::create([
+                    'imageable_id' => $product->id,
+                    'imageable_type' => 'product',
                     'image' => ("storage\\$img"),
                 ]);
             }
         }
+
         return redirect()->route('admin.products');
     }
 

@@ -58,10 +58,12 @@ class ProductController extends Controller
     public function products()
     {
         $vendor_team = Auth::user()->roles->first()->pivot->team_id;
-
-        $products = DB::table('product')->join('product_vendor', 'product_vendor.product_id', '=', 'product.id')->join('images', 'images.imageable_id', '=', 'product.id')
-            ->where('product_vendor.team_id', $vendor_team)->get();
-
+        
+        $products = DB::table('images')->groupBy('imageable_id')
+        ->join('product', 'product.id', '=', 'images.imageable_id')
+        ->join('product_vendor','product_id','=','product.id')
+        ->where('team_id','=',$vendor_team)->get();
+  
         return view('vendor.products', compact('products'));
     }
 
@@ -79,8 +81,6 @@ class ProductController extends Controller
 
         $id = request('product');
         $product = Product::find($id);
-        $image_org = Images::where('imageable_id', $id)->first();
-        $path = $image_org->image;
 
         $data = $req->validate([
             'name' => ['required'],
@@ -91,26 +91,39 @@ class ProductController extends Controller
         ]);
 
         $product->update($data);
-        if (!empty(request('image'))) {
+
+        if ($req->hasFile('file')) {
+            foreach ($req['file'] as $image) {
+                $img = time() . rand(1, 100000) . '.' . $image->extension();
+                $image->move(public_path('storage'), $img);
+                Images::create([
+                    'imageable_id' => $product->id,
+                    'imageable_type' => 'product',
+                    'image' => ("storage\\$img"),
+                ]);
+            }
+        }
+
+        return redirect()->route('vendor.products');
+    }
+
+    public function product_delete()
+    {
+        $id = request('product');
+        $product = Product::find($id);
+        $image_org = Images::where('imageable_id', $id)->get();
+
+        // dd($image_org);
+
+        foreach ($image_org as $img) {
+            $path = $img->image;
             if (File::exists($path)) {
                 File::delete($path);
-
-                $img = time() . '.' . request('image')->extension();
-                $req->image->move(public_path('storage'), $img);
-
-                // Update the image path in the database
-                $image_org->update([
-                    'image' => ("storage\\$img"),
-                ]);
+                $product->delete();
+                $img->delete();
             } else {
-                $img = time() . '.' . request('image')->extension();
-                $req->image->move(public_path('storage'), $img);
-
-
-                // Update the image path in the database
-                $image_org->update([
-                    'image' => ("storage\\$img"),
-                ]);
+                $product->delete();
+                $img->delete();
             }
         }
         return redirect()->route('vendor.products');

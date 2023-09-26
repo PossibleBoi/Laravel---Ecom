@@ -91,7 +91,6 @@
                     </div>
                     <!-- /.sidebar -->
                 </aside>
-
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
                     <!-- Content Header (Page header) -->
@@ -99,105 +98,157 @@
                         <div class="container-fluid">
 
                             <div class="row mb-2">
-                                <form action="{{route('edit.img_delete')}}" method="POST">
+                                <form action="{{ route('edit.img_delete') }}" method="POST">
                                     @csrf
-                                    @method('DELETE')   
+                                    @method('DELETE')
                                     @foreach ($images as $image)
-                                    <div class="col-md-4">
-                                        <div class="input-group mb-3">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input image-checkbox"
-                                                name="selected_images[{{$image->id}}]" id="image{{ $image->id }}" value="{{$image->id}}" >
-                                                <label class="custom-control-label" for="image{{ $image->id }}">
-                                                    <img src="{{ asset($image->image) }}" alt="No" width="125px"
-                                                        height="125px">
-                                                </label>
+                                        <div class="col-md-4">
+                                            <div class="input-group mb-3">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input image-checkbox"
+                                                        name="selected_images[{{ $image->id }}]"
+                                                        id="image{{ $image->id }}" value="{{ $image->id }}">
+                                                    <label class="custom-control-label" for="image{{ $image->id }}">
+                                                        <img src="{{ asset($image->image) }}" alt="No"
+                                                            width="125px" height="125px">
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                                <!-- Add a button to trigger image removal -->
-                                <div class="input-group mb-3">
-                                    <div class="custom-file">
-                                            
-                                        <button id="removeImageButton" class="btn btn-danger">Remove Image</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                             
-                            <form action="{{ route('a_product.update', ['product' => $products->first()->id]) }}"
-                                method="POST" enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
-                                <div>
-                                    <label> &nbsp;Name</label>
-                                    <input type="text" class="form-control" name="name"
-                                        value="{{ $products->first()->name }}" autocomplete="off">
-
-                                    <label> &nbsp;Description</label>
-                                    <input type="text" class="form-control" name="description"
-                                        value="{{ $products->first()->description }}" autocomplete="off">
-
-                                    <label> &nbsp;Brand</label>
-                                    <input type="text" class="form-control" name="brand"
-                                        value="{{ $products->first()->brand }}" autocomplete="off">
-
-                                    <label> &nbsp;Stock</label>
-                                    <input type="text" class="form-control" name="stock"
-                                        value="{{ $products->first()->stock }}" autocomplete="off">
-
-                                    <label> &nbsp;Price</label>
-                                    <input type="text" class="form-control" name="price"
-                                        value="{{ $products->first()->price }}" autocomplete="off">
-
-
-
+                                    @endforeach
+                                    <!-- Add a button to trigger image removal -->
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="customFile"
-                                                name="image">
-                                            <label class="custom-file-label">Choose File</label>
-                                        </div>
-                                    </div>
-                                    <h2><button class="btn btn-success"><b>Submit</b></button></h2>
-                                    <h3>
-                                        <a href="{{ route('admin.products') }}" class="badge badge-danger">Cancel</a>
-                                    </h3>
-                            </form>
 
-                        </div><!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </div>
-                <!-- /.content-header -->
+                                            <button id="removeImageButton" class="btn btn-danger">Remove Image</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <form action="{{ route('a_product.update', ['product' => $products->first()->id]) }}"
+                            id="image-update" method="POST" class="dropzone" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
 
-                <!-- Main content -->
-                <div class="content">
-                    <div class="container-fluid">
+                            <input type="text" class="form-control" name="name"
+                                value="{{ $products->first()->name }}" autocomplete="off">
 
-                        <!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </div>
-                <!-- /.content -->
+                            <label> &nbsp;Description</label>
+                            <input type="text" class="form-control" name="description"
+                                value="{{ $products->first()->description }}" autocomplete="off">
+
+                            <label> &nbsp;Brand</label>
+                            <input type="text" class="form-control" name="brand"
+                                value="{{ $products->first()->brand }}" autocomplete="off">
+
+                            <label> &nbsp;Stock</label>
+                            <input type="text" class="form-control" name="stock"
+                                value="{{ $products->first()->stock }}" autocomplete="off">
+
+                            <label> &nbsp;Price</label>
+                            <input type="text" class="form-control" name="price"
+                                value="{{ $products->first()->price }}" autocomplete="off">
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            </ul>
+                        </form>
+
+
+                        <h3>
+                            <a href="{{ route('admin.products') }}" class="badge badge-danger">Cancel</a>
+                        </h3>
+
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
             </div>
-            <!-- /.content-wrapper -->
+            <!-- /.content-header -->
 
-            <!-- Control Sidebar -->
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
 
-            <!-- /.control-sidebar -->
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
 
-            <!-- Main Footer -->
-            <footer class="main-footer">
-                <!-- To the right -->
-                <div class="float-right d-none d-sm-inline">
-                    Anything you want
-                </div>
-                <!-- Default to the left -->
-                <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All
-                rights reserved.
-            </footer>
+        <!-- Control Sidebar -->
+
+        <!-- /.control-sidebar -->
+
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="float-right d-none d-sm-inline">
+                Anything you want
+            </div>
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All
+            rights reserved.
+        </footer>
         </div>
         </div>
+        @push('script')
+        @endpush
+        <script>
+            var dropzone = new Dropzone('#image-update', {
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 100,
+                maxFiles: 5,
+                maxFilesize: 1,
+                thumbnailWidth: 200,
+                acceptedFiles: ".jpeg,.jpg,.png,",
+                addRemoveLinks: true,
+                success: function(file, response) {
+                    console.log(response);
+                    showMessage("Upload Successful");
+                    file.previewElement.querySelector(".dz-remove").remove();
+                    setTimeout(function() {
+                        window.location.href = "{{ route('admin.products') }}";
+                    }, 500);
+                },
+        
+                error: function(file, response) {
+                    return false;
+                }
+            });
+        
+            // Find the form element and store it in a variable
+            var formElement = document.querySelector("#image-update");
+        
+            // Find the submit button within the form
+            var submitButton = formElement.querySelector("button[type=submit]");
+        
+            submitButton.addEventListener("click", function(e) {
+                // Make sure that the form isn't actually being sent.
+                e.preventDefault();
+                e.stopPropagation();
+        
+                // Check if there are queued files in Dropzone
+                if (dropzone.getQueuedFiles().length > 0) {
+                    dropzone.processQueue();
+                } else {
+                    // If no files are queued, submit the form without Dropzone
+                    formElement.submit();
+                }
+            });
+        
+            function showMessage(message) {
+                // Create and display a pop-up message
+                var popup = document.createElement("div");
+                popup.innerHTML = message;
+                popup.className = "popup";
+                document.body.appendChild(popup);
+        
+                // Remove the pop-up message after 3 seconds
+                setTimeout(function() {
+                    popup.parentNode.removeChild(popup);
+                }, 500);
+            }
+        </script>        
     </x-slot>
-
 </x-layout>

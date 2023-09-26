@@ -145,7 +145,7 @@
                                 @if ($errors->has('brand'))
                                         <span class="text-danger">{{"Brand is required."}}</span>
                                     @endif
-                                    <button type="button" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                             </ul>
                                   </form>
                                 
@@ -158,7 +158,6 @@
                 <!-- Main content -->
                 <div class="content">
                   <div class="container-fluid">
-                    
                     <!-- /.row -->
                   </div><!-- /.container-fluid -->
                 </div>
@@ -181,7 +180,64 @@
               </footer>
             </div>
             </div>
-            
+            @push('script')
+            @endpush
+                <script type="text/javascript">
+              var dropzone = new Dropzone('#image-upload', {
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 100,
+                maxFiles: 5,
+                maxFilesize: 1,
+                thumbnailWidth: 200,
+                acceptedFiles: ".jpeg,.jpg,.png,",
+                addRemoveLinks: true,
+                success: function(file, response) {
+                    console.log(response);
+                    showMessage("Upload Successful");
+                    file.previewElement.querySelector(".dz-remove").remove();
+                    setTimeout(function() {
+                        window.location.href = "{{ route('vendor.products') }}";
+                    }, 500);
+                },
+
+                error: function(file, response) {
+                    return false;
+                }
+
+            });
+            document.querySelector("button[type=submit]").addEventListener("click", function(e) {
+                // Make sure that the form isn't actually being sent.
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.processQueue();
+            });
+
+            function showMessage(message) {
+                // Create and display a pop-up message
+                var popup = document.createElement("div");
+                popup.innerHTML = message;
+                popup.className = "popup";
+                document.body.appendChild(popup);
+
+                // Remove the pop-up message after 3 seconds
+                setTimeout(function() {
+                    popup.parentNode.removeChild(popup);
+                }, 500);
+            }
+            this.on("sendingmultiple", function() {
+                // Gets triggered when the form is actually being sent.
+                // Hide the success button or the complete form.
+            });
+            this.on("successmultiple", function(files, response) {
+                // Gets triggered when the files have successfully been sent.
+                // Redirect user or notify of success.
+            });
+            this.on("errormultiple", function(files, response) {
+                // Gets triggered when there was an error sending the files.
+                // Maybe show form again, and notify user of error
+            });
+        </script>
     </x-slot>
   </x-layout>
   
