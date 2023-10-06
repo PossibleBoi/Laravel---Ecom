@@ -7,13 +7,14 @@ use App\Models\ProdVendor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Controllers\PaymentGate;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 
 /*
@@ -27,22 +28,30 @@ use App\Http\Controllers\ProfileController;
 |
 */
 
-
+Route::get('/test', function () {
+    return view('test');
+});
 Route::get('/',[HomeController::class,'home'])->name('home');
 Route::get('/product/{id}',[HomeController::class,'individual_product'])->name('inv_product');
 Route::get('/all_products',[HomeController::class,'all_products'])->name('all_products');
 
 Route::middleware('auth')->group(function(){
+    Route::delete('img/delete',[ProductController::class,'edit_img_del'])->name('edit.img_delete');
     Route::get('/cart',[CartController::class,'cart'])->name('cart');
     Route::get('cart/add/{id}', [CartController::class, 'add_cart'])->name('cart.add');
-    Route::delete('img/delete',[ProductController::class,'edit_img_del'])->name('edit.img_delete');
+    Route::delete('/cart/delete/{id}',[CartController::class,'remove'])->name('cart.remove');
+    Route::post('/cart/update/{id}',[CartController::class,'quantity_update'])->name('cart.update');
+    Route::post('/checkout',[CartController::class,'checkout'])->name('checkout');
+    Route::post('/pay',[PaymentGate::class,'pay'])->name('pay');
+
+    Route::post('/order/cancel',[PaymentGate::class,'order_cancel'])->name('order.cancel');
+    Route::post('/order/deliver',[PaymentGate::class,'order_deliver'])->name('order.delivery');
+
 });
 
-
-
-Route::get('/dashboard', function () {
-    return view('dashboard  ');
-})->middleware(['auth', 'verified', 'role:user'])->name('dashboard');
+Route::middleware(['auth','role:user'])->group(function(){
+    Route::get('/dashboard', [DashController::class, 'user'])->name('dashboard');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -80,13 +89,16 @@ Route::middleware(['auth','role:admin'])->group(function () {
 
 Route::middleware(['auth','role:vendor'])->group(function () {
     Route::get('vendor/dashboard', [DashController::class, 'vendor'])->name('vendor.dashboard');
+    Route::get('vendor/orders',[VendorController::class,'orders'])->name('vendor.orders'); //Orders recieved by vendor
+    Route::get('vendor/products',[ProductController::class,'products'])->name('vendor.products'); //View all registered products
+    
     Route::get('vendor/product_add',[ProductController::class,'add'])->name('product.add'); //Add Vendor Products
     Route::post('vendor/product_create',[ProductController::class,'create'])->name('product.create'); //Create Vendor products
-    Route::post('vendor/product_create_img',[ProductController::class,'create_img'])->name('product.create_img'); //Add vendor teams
-    Route::get('vendor/products',[ProductController::class,'products'])->name('vendor.products'); //View all registered products
     Route::get('vendor/products/edit/{product}',[ProductController::class,'edit'])->name('product.edit'); //Edit Registered Vendor Information
     Route::put('vendor/products/update/{product}',[ProductController::class,'update'])->name('product.update'); //Edit Registered Vendor Information
+    Route::post('vendor/product_create_img',[ProductController::class,'create_img'])->name('product.create_img'); //Add vendor teams
     Route::delete('vendor/products/delete/{product}',[ProductController::class,'delete'])->name('product.delete'); //Delete Registered Vendor Information
+
 });
 
 require __DIR__.'/auth.php';

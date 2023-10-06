@@ -117,7 +117,7 @@
                                                 <td>
                                                     <select name="role_id">
                                                         @foreach ($roles as $role)
-                                                            <option value="{{ $role->id }}">{{ $role->name }}
+                                                            <option value="{{ $role->id }}"> {{ $role->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>

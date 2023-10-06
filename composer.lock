@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d26c0e90ec36af819494060a6a42be03",
+    "content-hash": "2dfef950af448b987a05d737cc51007a",
     "packages": [
         {
             "name": "brick/math",
@@ -135,6 +135,53 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
             },
             "time": "2022-10-27T11:44:00+00:00"
+        },
+        {
+            "name": "dipesh79/laravel-khalti",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Dipesh79/LaravelKhalti.git",
+                "reference": "67c5818c591d848a27776bbbab682ed4c04371e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Dipesh79/LaravelKhalti/zipball/67c5818c591d848a27776bbbab682ed4c04371e3",
+                "reference": "67c5818c591d848a27776bbbab682ed4c04371e3",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Dipesh79\\LaravelKhalti\\KhaltiServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dipesh79\\LaravelKhalti\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dipesh79",
+                    "email": "dipeshkhanal79@gmail.com",
+                    "homepage": "https://www.khanaldipesh.com.np",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel Khalti - A simple Laravel Package to integrate khalti payment.",
+            "support": {
+                "issues": "https://github.com/Dipesh79/LaravelKhalti/issues",
+                "source": "https://github.com/Dipesh79/LaravelKhalti/tree/master"
+            },
+            "time": "2023-06-18T14:40:37+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -607,22 +654,22 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.7.0",
+            "version": "7.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "fb7566caccf22d74d1ab270de3551f72a58399f5"
+                "reference": "1110f66a6530a40fe7aea0378fe608ee2b2248f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/fb7566caccf22d74d1ab270de3551f72a58399f5",
-                "reference": "fb7566caccf22d74d1ab270de3551f72a58399f5",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/1110f66a6530a40fe7aea0378fe608ee2b2248f9",
+                "reference": "1110f66a6530a40fe7aea0378fe608ee2b2248f9",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^1.5.3 || ^2.0",
-                "guzzlehttp/psr7": "^1.9.1 || ^2.4.5",
+                "guzzlehttp/promises": "^1.5.3 || ^2.0.1",
+                "guzzlehttp/psr7": "^1.9.1 || ^2.5.1",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
                 "symfony/deprecation-contracts": "^2.2 || ^3.0"
@@ -713,7 +760,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.7.0"
+                "source": "https://github.com/guzzle/guzzle/tree/7.8.0"
             },
             "funding": [
                 {
@@ -729,7 +776,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-21T14:04:53+00:00"
+            "time": "2023-08-27T10:20:53+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -8434,7 +8481,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "dipesh79/laravel-khalti": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

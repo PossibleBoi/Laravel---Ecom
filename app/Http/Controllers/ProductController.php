@@ -148,7 +148,7 @@ class ProductController extends Controller
         return redirect()->route('vendor.products');
     }
 
-    public function edit_img_del(Request $req)
+    public function edit_img_del()
     {
         foreach(request('selected_images') as $img_id){
         $image_org = Images::where('id', $img_id)->first();

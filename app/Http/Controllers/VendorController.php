@@ -6,7 +6,12 @@ use App\Models\Role;
 use App\Models\Team;
 
 use App\Models\User;
+use App\Models\Images;
+use App\Models\Checkout;
+use App\Models\ProdVendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class VendorController extends Controller
 {
@@ -95,7 +100,7 @@ class VendorController extends Controller
             $query->where('name', 'vendor')->where('team_id', $team->id);
         })->get();
 
-        foreach ($users as $user) {
+        foreach($users as $user) {
             $user->roles()->updateExistingPivot($user->roles->first()->id, ['team_id' => 3]);
         }
 
@@ -103,5 +108,35 @@ class VendorController extends Controller
         $team->delete();
 
         return redirect()->route('admin.vendors');
+    }
+
+
+    public function orders()
+    {
+        $team = Auth::user()->roles->first()->pivot->team_id;
+        $vendor_product = ProdVendor::where('team_id', $team)->get();
+
+        $orders = DB::table('orders')
+            ->join('product', 'product.id', '=', 'orders.product_id')
+            ->join('product_vendor', 'product_vendor.product_id', '=', 'orders.product_id')
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->where('product_vendor.team_id', $team)
+            ->select('orders.*', 'product.name as product_name','users.name')
+            ->get()
+            ->groupBy('name');
+
+         $customers = DB::table('users')
+        ->join('orders', 'orders.user_id', '=', 'users.id')
+        ->join('product_vendor', 'product_vendor.product_id', '=', 'orders.product_id')
+        ->select('users.name', 'users.email', 'users.id')
+        ->distinct()
+        ->where('product_vendor.team_id', $team)
+        ->get();
+
+        $images = Images::where('imageable_type','=','product')
+        ->groupBy('imageable_id')->select('imageable_id','image')->get();
+
+
+        return view('vendor.orders', compact('orders','customers','images'));
     }
 }
